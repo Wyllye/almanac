@@ -47,4 +47,4 @@ Depois é só abrir `http://localhost:5173` no seu navegador.
 
 ---
 
-Desenvolvido com ❤️ por **Maria** (frontend) e **Roberto** (backend)
+Desenvolvido com ❤️ por **Maria Isabel** (frontend) e **Vinicius Andrei** (backend)
