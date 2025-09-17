@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Almanac - Controlador de Hábitos</title>
+    <link rel="stylesheet" href="src/style.css">
+</head>
+<body>
+    <div id="app">
+        <!-- Header -->
+        <header class="header">
+            <div class="container">
+                <h1 class="logo">Almanac</h1>
+                <nav class="nav">
+                    <button class="nav-btn active" data-tab="dashboard">Dashboard</button>
+                    <button class="nav-btn" data-tab="statistics">Estatísticas</button>
+                </nav>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main">
+            <div class="container">
+                <!-- Dashboard Tab -->
+                <div id="dashboard" class="tab-content active">
+                    <div class="hero">
+                        <h2 class="hero-title">Seus hábitos de hoje</h2>
+                        <div class="stats">
+                            <div class="stat">
+                                <span class="stat-icon">🔥</span>
+                                <span class="stat-number" id="current-streak">0</span>
+                                <span class="stat-label">dias seguidos</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-icon">🏆</span>
+                                <span class="stat-number" id="completed-today">0</span>
+                                <span class="stat-label">concluídos hoje</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-icon">🎯</span>
+                                <span class="stat-number" id="total-habits">0</span>
+                                <span class="stat-label">hábitos</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="content-area">
+                        <!-- Loading -->
+                        <div id="loading" class="loading hidden">
+                            <div class="spinner"></div>
+                            <p>Carregando seus hábitos...</p>
+                        </div>
+
+                        <!-- Empty State -->
+                        <div id="empty-state" class="empty-state">
+                            <div class="empty-icon">🌱</div>
+                            <h3>Comece sua jornada de hábitos</h3>
+                            <p>Crie seu primeiro hábito e comece a construir uma rotina incrível!</p>
+                            <button class="btn-primary" id="create-first-habit">
+                                <span class="btn-icon">✨</span>
+                                Criar Primeiro Hábito
+                            </button>
+                        </div>
+
+                        <!-- Habits List -->
+                        <div id="habits-list" class="habits-list hidden"></div>
+                    </div>
+                </div>
+
+                <!-- Statistics Tab -->
+                <div id="statistics" class="tab-content">
+                    <div class="content-area">
+                        <h2 style="margin-bottom: 2rem; color: #1f2937; font-size: 1.75rem;">Estatísticas</h2>
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <div class="stat-card-header">
+                                    <h3>Total de Hábitos</h3>
+                                    <span class="stat-card-icon">🎯</span>
+                                </div>
+                                <p class="stat-card-value" id="stats-total">0</p>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-card-header">
+                                    <h3>Streak Atual</h3>
+                                    <span class="stat-card-icon">🔥</span>
+                                </div>
+                                <p class="stat-card-value"><span id="stats-streak">0</span> dias</p>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-card-header">
+                                    <h3>Conquistas</h3>
+                                    <span class="stat-card-icon">🏆</span>
+                                </div>
+                                <p class="stat-card-value" id="stats-achievements">0</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Floating Action Button -->
+        <button id="fab" class="fab">+</button>
+
+        <!-- Modal Form -->
+        <div id="modal" class="modal hidden">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 id="modal-title">Novo Hábito</h3>
+                    <button id="close-modal" class="close-btn">×</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="habit-name">Nome do Hábito</label>
+                        <input type="text" id="habit-name" placeholder="Ex: Beber 2L de água" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="habit-description">Descrição (opcional)</label>
+                        <textarea id="habit-description" placeholder="Descrição do seu hábito..." rows="3"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="habit-category">Categoria</label>
+                        <select id="habit-category">
+                            <option value="saude">🏥 Saúde</option>
+                            <option value="exercicio">💪 Exercício</option>
+                            <option value="estudo">📚 Estudo</option>
+                            <option value="trabalho">💼 Trabalho</option>
+                            <option value="lazer">🎮 Lazer</option>
+                            <option value="outros">⭐ Outros</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="cancel-btn" class="btn-secondary">Cancelar</button>
+                    <button id="save-btn" class="btn-primary">
+                        <span id="save-btn-text">Criar</span>
+                        <span class="btn-icon">✨</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Overlay -->
+        <div id="overlay" class="overlay hidden"></div>
+    </div>
+
+    <script type="module" src="/src/main.ts"></script>
+</body>
+</html>
