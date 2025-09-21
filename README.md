@@ -21,7 +21,7 @@ Um aplicativo simples para te ajudar a criar e manter hábitos saudáveis.
 ### Backend (API)
 - **Node.js** + **TypeScript**
 - **NestJS** (framework)
-- **SQLite** (banco de dados)
+- **PostgreSQL** (banco de dados)
 - **Prisma** (ORM)
 
 ### Frontend (Interface)
