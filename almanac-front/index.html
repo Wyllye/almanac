@@ -3,8 +3,727 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Almanac - Controlador de Hábitos</title>
-    <link rel="stylesheet" href="src/style.css">
+    <title>Almanac - Controlador de HÃ¡bitos</title>
+    <style>
+        /* Reset e Base */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #1f2937;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1024px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        .hidden { display: none !important; }
+
+        /* Header */
+        .header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+        }
+
+        .logo {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: white;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav {
+            display: flex;
+            gap: 0.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.25rem;
+            border-radius: 50px;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-btn {
+            background: none;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: 500;
+        }
+
+        .nav-btn:hover {
+            color: white;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-btn.active {
+            background: white;
+            color: #667eea;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
+        }
+
+        /* Main */
+        .main {
+            padding: 2rem 0;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem 0;
+        }
+
+        .hero-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            color: white;
+            text-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 4rem;
+            flex-wrap: wrap;
+        }
+
+        .hero-stat {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px);
+            padding: 1.5rem 2rem;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            min-width: 150px;
+        }
+
+        .hero-stat:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .hero-stat-icon {
+            font-size: 2rem;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .hero-stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: white;
+            display: block;
+        }
+
+        .hero-stat-label {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        /* Content Area */
+        .content-area {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 24px;
+            padding: 2rem;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        /* Section Title */
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Dashboard Grid */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Habits List */
+        .habits-section {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+        }
+
+        .habits-list {
+            display: grid;
+            gap: 1rem;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .habit-card {
+            background: #f8fafc;
+            border-radius: 16px;
+            padding: 1.5rem;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .habit-card.completed {
+            border-color: #10b981;
+            background: linear-gradient(135deg, #f0fdf4, #dcfce7);
+        }
+
+        .habit-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .habit-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .habit-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .habit-icon {
+            width: 3rem;
+            height: 3rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: white;
+        }
+
+        .habit-icon.saude { background: linear-gradient(135deg, #10b981, #059669); }
+        .habit-icon.exercicio { background: linear-gradient(135deg, #3b82f6, #1d4ed8); }
+        .habit-icon.estudo { background: linear-gradient(135deg, #8b5cf6, #7c3aed); }
+        .habit-icon.trabalho { background: linear-gradient(135deg, #f59e0b, #d97706); }
+        .habit-icon.lazer { background: linear-gradient(135deg, #ec4899, #db2777); }
+        .habit-icon.outros { background: linear-gradient(135deg, #6b7280, #4b5563); }
+
+        .habit-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #1f2937;
+        }
+
+        .habit-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .action-btn {
+            width: 2rem;
+            height: 2rem;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            transition: all 0.3s ease;
+        }
+
+        .action-btn.edit {
+            background: #e0e7ff;
+            color: #3730a3;
+        }
+
+        .action-btn.delete {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .habit-progress {
+            background: #e5e7eb;
+            border-radius: 8px;
+            height: 6px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            background: linear-gradient(90deg, #10b981, #059669);
+            height: 100%;
+            border-radius: 8px;
+            transition: width 0.5s ease;
+        }
+
+        /* Quick Stats Sidebar */
+        .quick-stats {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 20px;
+            padding: 1.5rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+            text-align: center;
+        }
+
+        .stat-card-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .stat-card-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card-label {
+            color: #6b7280;
+            font-size: 0.9rem;
+        }
+
+        /* Challenge Page Styles */
+        .challenge-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .challenge-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 0.5rem;
+        }
+
+        .challenge-date {
+            color: #6b7280;
+            font-size: 1.1rem;
+        }
+
+        .challenge-stats {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+            padding: 1rem 1.5rem;
+            border-radius: 16px;
+            text-align: center;
+            min-width: 120px;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #667eea;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #6b7280;
+            margin-top: 0.25rem;
+        }
+
+        .challenge-status {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 20px;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .status-inactive {
+            background: linear-gradient(135deg, #6b7280, #4b5563);
+        }
+
+        .status-active {
+            background: linear-gradient(135deg, #10b981, #059669);
+        }
+
+        .status-complete {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+        }
+
+        .challenge-habits {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .habit-item {
+            background: white;
+            border-radius: 16px;
+            padding: 1.5rem;
+            border: 2px solid #e5e7eb;
+            transition: all 0.3s ease;
+        }
+
+        .habit-item.completed {
+            border-color: #10b981;
+            background: linear-gradient(135deg, #f0fdf4, #dcfce7);
+        }
+
+        .habit-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .habit-details h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 0.25rem;
+        }
+
+        .habit-details p {
+            color: #6b7280;
+            font-size: 0.9rem;
+        }
+
+        .habit-checkbox {
+            position: relative;
+        }
+
+        .checkbox-btn {
+            width: 3rem;
+            height: 3rem;
+            border: 3px solid #e5e7eb;
+            border-radius: 50%;
+            background: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            font-size: 1.5rem;
+        }
+
+        .checkbox-btn.completed {
+            background: linear-gradient(135deg, #10b981, #059669);
+            border-color: #059669;
+            color: white;
+        }
+
+        .checkbox-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .checkbox-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Progress Circle */
+        .progress-circle {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 1rem;
+            position: relative;
+        }
+
+        .progress-circle svg {
+            transform: rotate(-90deg);
+            width: 100%;
+            height: 100%;
+        }
+
+        .progress-circle-bg {
+            fill: none;
+            stroke: #e5e7eb;
+            stroke-width: 8;
+        }
+
+        .progress-circle-fill {
+            fill: none;
+            stroke: #10b981;
+            stroke-width: 8;
+            stroke-linecap: round;
+            transition: stroke-dasharray 0.5s ease;
+        }
+
+        .progress-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1f2937;
+        }
+
+        /* Statistics Page */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .chart-container {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+        }
+
+        .chart-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .progress-ring {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .progress-ring svg {
+            transform: rotate(-90deg);
+            width: 100%;
+            height: 100%;
+        }
+
+        .progress-ring-bg {
+            fill: none;
+            stroke: #e5e7eb;
+            stroke-width: 8;
+        }
+
+        .progress-ring-fill {
+            fill: none;
+            stroke: #10b981;
+            stroke-width: 8;
+            stroke-linecap: round;
+            transition: stroke-dasharray 0.5s ease;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .calendar-day {
+            aspect-ratio: 1;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 600;
+            background: #f3f4f6;
+            color: #6b7280;
+        }
+
+        .calendar-day.completed {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+        }
+
+        .calendar-day.today {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        /* Buttons */
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #10b981, #059669);
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+        }
+
+        /* Floating Action Button */
+        .fab {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 4.5rem;
+            height: 4.5rem;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 1.75rem;
+            cursor: pointer;
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .fab:hover {
+            transform: scale(1.1) rotate(90deg);
+            box-shadow: 0 20px 50px rgba(102, 126, 234, 0.5);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+
+        .empty-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        .empty-state h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 0.5rem;
+        }
+
+        .empty-state p {
+            color: #6b7280;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Success Animation */
+        @keyframes success {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        .success-animation {
+            animation: success 0.6s ease;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header .container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .hero-stats {
+                gap: 1.5rem;
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .challenge-stats {
+                gap: 1rem;
+            }
+
+            .habit-content {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: flex-start;
+            }
+
+            .habit-checkbox {
+                align-self: flex-end;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .fab {
+                bottom: 1rem;
+                right: 1rem;
+                width: 4rem;
+                height: 4rem;
+            }
+        }
+    </style>
 </head>
 <body>
     <div id="app">
@@ -14,7 +733,8 @@
                 <h1 class="logo">Almanac</h1>
                 <nav class="nav">
                     <button class="nav-btn active" data-tab="dashboard">Dashboard</button>
-                    <button class="nav-btn" data-tab="statistics">Estatísticas</button>
+                    <button class="nav-btn" data-tab="challenge">Ofensiva</button>
+                    <button class="nav-btn" data-tab="statistics">EstatÃ­sticas</button>
                 </nav>
             </div>
         </header>
@@ -22,77 +742,184 @@
         <!-- Main Content -->
         <main class="main">
             <div class="container">
+                
                 <!-- Dashboard Tab -->
                 <div id="dashboard" class="tab-content active">
                     <div class="hero">
-                        <h2 class="hero-title">Seus hábitos de hoje</h2>
-                        <div class="stats">
-                            <div class="stat">
-                                <span class="stat-icon">🔥</span>
-                                <span class="stat-number" id="current-streak">0</span>
-                                <span class="stat-label">dias seguidos</span>
+                        <h2 class="hero-title">Seus hÃ¡bitos de hoje</h2>
+                        <div class="hero-stats">
+                            <div class="hero-stat">
+                                <span class="hero-stat-icon">ðŸ”¥</span>
+                                <span class="hero-stat-number" id="streak-counter">0</span>
+                                <span class="hero-stat-label">dias de ofensiva</span>
                             </div>
-                            <div class="stat">
-                                <span class="stat-icon">🏆</span>
-                                <span class="stat-number" id="completed-today">0</span>
-                                <span class="stat-label">concluídos hoje</span>
+                            <div class="hero-stat">
+                                <span class="hero-stat-icon">âœ…</span>
+                                <span class="hero-stat-number" id="completed-counter">0</span>
+                                <span class="hero-stat-label">concluÃ­dos hoje</span>
                             </div>
-                            <div class="stat">
-                                <span class="stat-icon">🎯</span>
-                                <span class="stat-number" id="total-habits">0</span>
-                                <span class="stat-label">hábitos</span>
+                            <div class="hero-stat">
+                                <span class="hero-stat-icon">ðŸŽ¯</span>
+                                <span class="hero-stat-number" id="total-counter">0</span>
+                                <span class="hero-stat-label">hÃ¡bitos totais</span>
                             </div>
                         </div>
                     </div>
 
                     <div class="content-area">
-                        <!-- Loading -->
-                        <div id="loading" class="loading hidden">
-                            <div class="spinner"></div>
-                            <p>Carregando seus hábitos...</p>
-                        </div>
-
-                        <!-- Empty State -->
-                        <div id="empty-state" class="empty-state">
-                            <div class="empty-icon">🌱</div>
-                            <h3>Comece sua jornada de hábitos</h3>
-                            <p>Crie seu primeiro hábito e comece a construir uma rotina incrível!</p>
-                            <button class="btn-primary" id="create-first-habit">
-                                <span class="btn-icon">✨</span>
-                                Criar Primeiro Hábito
+                        <div id="dashboard-empty-state" class="empty-state">
+                            <div class="empty-icon">ðŸ“</div>
+                            <h3>Nenhum hÃ¡bito ainda</h3>
+                            <p>Comece criando seu primeiro hÃ¡bito para iniciar sua jornada!</p>
+                            <button class="btn-primary" onclick="showCreateHabitModal()">
+                                <span>âœ¨</span>
+                                Criar Primeiro HÃ¡bito
                             </button>
                         </div>
 
-                        <!-- Habits List -->
-                        <div id="habits-list" class="habits-list hidden"></div>
+                        <div id="dashboard-content" class="dashboard-grid hidden">
+                            <div class="habits-section">
+                                <h3 class="section-title">ðŸ“‹ Seus HÃ¡bitos</h3>
+                                <div class="habits-list" id="dashboard-habits"></div>
+                            </div>
+
+                            <div class="quick-stats">
+                                <div class="stat-card">
+                                    <span class="stat-card-icon">ðŸ“ˆ</span>
+                                    <div class="stat-card-value" id="completion-rate">0%</div>
+                                    <div class="stat-card-label">Taxa de conclusÃ£o</div>
+                                </div>
+
+                                <div class="stat-card">
+                                    <span class="stat-card-icon">â±ï¸</span>
+                                    <div class="stat-card-value" id="active-days">0</div>
+                                    <div class="stat-card-label">Dias ativos</div>
+                                </div>
+
+                                <div class="stat-card">
+                                    <span class="stat-card-icon">ðŸ†</span>
+                                    <div class="stat-card-value" id="achievements">0</div>
+                                    <div class="stat-card-label">Conquistas</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Challenge Tab -->
+                <div id="challenge" class="tab-content">
+                    <div class="content-area">
+                        <div id="challenge-empty-state" class="empty-state">
+                            <div class="empty-icon">ðŸš€</div>
+                            <h3>Ofensiva indisponÃ­vel</h3>
+                            <p>Crie pelo menos um hÃ¡bito para comeÃ§ar sua ofensiva diÃ¡ria!</p>
+                            <button class="btn-primary" onclick="switchTab('dashboard')">
+                                <span>ðŸ“</span>
+                                Criar HÃ¡bitos
+                            </button>
+                        </div>
+
+                        <div id="challenge-content" class="hidden">
+                            <div class="challenge-header">
+                                <h2 class="challenge-title">Ofensiva DiÃ¡ria</h2>
+                                <p class="challenge-date" id="current-date"></p>
+                            </div>
+
+                            <div class="challenge-stats">
+                                <div class="stat-item">
+                                    <div class="stat-value" id="challenge-streak">0</div>
+                                    <div class="stat-label">Dias Seguidos</div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-value" id="challenge-completed">0</div>
+                                    <div class="stat-label">ConcluÃ­dos</div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-value" id="challenge-total">0</div>
+                                    <div class="stat-label">Total</div>
+                                </div>
+                            </div>
+
+                            <div class="progress-circle">
+                                <svg>
+                                    <circle class="progress-circle-bg" cx="60" cy="60" r="50"></circle>
+                                    <circle class="progress-circle-fill" cx="60" cy="60" r="50" 
+                                            stroke-dasharray="0 314.16" id="progress-circle"></circle>
+                                </svg>
+                                <div class="progress-text" id="progress-percentage">0%</div>
+                            </div>
+
+                            <div class="challenge-status" id="challenge-status">
+                                <h3>Pronto para comeÃ§ar sua ofensiva de hoje?</h3>
+                                <p>Clique no botÃ£o abaixo para iniciar e manter seu streak!</p>
+                                <button class="btn-primary" id="start-challenge" onclick="startChallenge()">
+                                    ðŸš€ Iniciar Ofensiva
+                                </button>
+                            </div>
+
+                            <div class="challenge-habits" id="challenge-habits"></div>
+                        </div>
                     </div>
                 </div>
 
                 <!-- Statistics Tab -->
                 <div id="statistics" class="tab-content">
                     <div class="content-area">
-                        <h2 style="margin-bottom: 2rem; color: #1f2937; font-size: 1.75rem;">Estatísticas</h2>
-                        <div class="stats-grid">
-                            <div class="stat-card">
-                                <div class="stat-card-header">
-                                    <h3>Total de Hábitos</h3>
-                                    <span class="stat-card-icon">🎯</span>
+                        <div id="stats-empty-state" class="empty-state">
+                            <div class="empty-icon">ðŸ“Š</div>
+                            <h3>EstatÃ­sticas indisponÃ­veis</h3>
+                            <p>Crie hÃ¡bitos e complete alguns dias para ver suas estatÃ­sticas!</p>
+                        </div>
+
+                        <div id="stats-content" class="hidden">
+                            <h2 class="section-title">ðŸ“Š EstatÃ­sticas Detalhadas</h2>
+                            
+                            <div class="stats-grid">
+                                <div class="chart-container">
+                                    <h3 class="chart-title">Progresso Geral</h3>
+                                    <div class="progress-ring">
+                                        <svg>
+                                            <circle class="progress-ring-bg" cx="60" cy="60" r="50"></circle>
+                                            <circle class="progress-ring-fill" cx="60" cy="60" r="50" 
+                                                    stroke-dasharray="0 314.16" id="stats-progress-ring"></circle>
+                                        </svg>
+                                        <div class="progress-text" id="stats-progress-text">0%</div>
+                                    </div>
+                                    <p style="text-align: center; color: #6b7280; margin-top: 1rem;" id="stats-progress-desc">
+                                        0 de 0 hÃ¡bitos concluÃ­dos hoje
+                                    </p>
                                 </div>
-                                <p class="stat-card-value" id="stats-total">0</p>
-                            </div>
-                            <div class="stat-card">
-                                <div class="stat-card-header">
-                                    <h3>Streak Atual</h3>
-                                    <span class="stat-card-icon">🔥</span>
+
+                                <div class="chart-container">
+                                    <h3 class="chart-title">Ãšltimos 14 dias</h3>
+                                    <div class="calendar-grid" id="stats-calendar"></div>
+                                    <p style="text-align: center; color: #10b981; margin-top: 1rem; font-weight: 600;" id="stats-streak-text">
+                                        ðŸ”¥ 0 dias de ofensiva!
+                                    </p>
                                 </div>
-                                <p class="stat-card-value"><span id="stats-streak">0</span> dias</p>
-                            </div>
-                            <div class="stat-card">
-                                <div class="stat-card-header">
-                                    <h3>Conquistas</h3>
-                                    <span class="stat-card-icon">🏆</span>
+
+                                <div class="chart-container">
+                                    <h3 class="chart-title">Por Categoria</h3>
+                                    <div id="stats-categories" style="display: flex; flex-direction: column; gap: 1rem;"></div>
                                 </div>
-                                <p class="stat-card-value" id="stats-achievements">0</p>
+
+                                <div class="chart-container">
+                                    <h3 class="chart-title">Resumo Geral</h3>
+                                    <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+                                        <div style="text-align: center;">
+                                            <div style="font-size: 2rem; font-weight: 700; color: #667eea;" id="total-active-days">0</div>
+                                            <div style="color: #6b7280;">Total de dias ativos</div>
+                                        </div>
+                                        <div style="text-align: center;">
+                                            <div style="font-size: 2rem; font-weight: 700; color: #10b981;" id="success-rate">0%</div>
+                                            <div style="color: #6b7280;">Taxa de sucesso mÃ©dia</div>
+                                        </div>
+                                        <div style="text-align: center;">
+                                            <div style="font-size: 2rem; font-weight: 700; color: #f59e0b;" id="best-streak">0</div>
+                                            <div style="color: #6b7280;">Melhor sequÃªncia</div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -102,32 +929,32 @@
 
         <!-- Floating Action Button -->
         <button id="fab" class="fab">+</button>
-
-        <!-- Modal Form -->
+    </div>
+     <!-- Modal Form -->
         <div id="modal" class="modal hidden">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h3 id="modal-title">Novo Hábito</h3>
-                    <button id="close-modal" class="close-btn">×</button>
+                    <h3 id="modal-title">Novo HÃ¡bito</h3>
+                    <button id="close-modal" class="close-btn">Ã—</button>
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="habit-name">Nome do Hábito</label>
-                        <input type="text" id="habit-name" placeholder="Ex: Beber 2L de água" required>
+                        <label for="habit-name">Nome do HÃ¡bito</label>
+                        <input type="text" id="habit-name" placeholder="Ex: Beber 2L de Ã¡gua" required>
                     </div>
                     <div class="form-group">
-                        <label for="habit-description">Descrição (opcional)</label>
-                        <textarea id="habit-description" placeholder="Descrição do seu hábito..." rows="3"></textarea>
+                        <label for="habit-description">DescriÃ§Ã£o (opcional)</label>
+                        <textarea id="habit-description" placeholder="DescriÃ§Ã£o do seu hÃ¡bito..." rows="3"></textarea>
                     </div>
                     <div class="form-group">
                         <label for="habit-category">Categoria</label>
                         <select id="habit-category">
-                            <option value="saude">🏥 Saúde</option>
-                            <option value="exercicio">💪 Exercício</option>
-                            <option value="estudo">📚 Estudo</option>
-                            <option value="trabalho">💼 Trabalho</option>
-                            <option value="lazer">🎮 Lazer</option>
-                            <option value="outros">⭐ Outros</option>
+                            <option value="saude">ðŸ¥ SaÃºde</option>
+                            <option value="exercicio">ðŸ’ª ExercÃ­cio</option>
+                            <option value="estudo">ðŸ“š Estudo</option>
+                            <option value="trabalho">ðŸ’¼ Trabalho</option>
+                            <option value="lazer">ðŸŽ® Lazer</option>
+                            <option value="outros">â­ Outros</option>
                         </select>
                     </div>
                 </div>
@@ -135,16 +962,586 @@
                     <button id="cancel-btn" class="btn-secondary">Cancelar</button>
                     <button id="save-btn" class="btn-primary">
                         <span id="save-btn-text">Criar</span>
-                        <span class="btn-icon">✨</span>
+                        <span class="btn-icon">âœ¨</span>
                     </button>
                 </div>
             </div>
         </div>
 
-        <!-- Overlay -->
-        <div id="overlay" class="overlay hidden"></div>
-    </div>
+    <script>
+        // Estado global da aplicaÃ§Ã£o
+        let appState = {
+            habits: [],
+            currentStreak: 0,
+            challengeActive: false,
+            completedHabits: [],
+            todayDate: new Date().toISOString().split('T')[0]
+        };
 
-    <script type="module" src="/src/main.ts"></script>
+        // API Configuration
+        const API_BASE_URL = 'http://localhost:3000';
+
+        // InicializaÃ§Ã£o
+        document.addEventListener('DOMContentLoaded', function() {
+            setupEventListeners();
+            loadAppData();
+            updateCurrentDate();
+        });
+
+        function setupEventListeners() {
+            // Tab switching
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const tabName = e.target.dataset.tab;
+                    switchTab(tabName);
+                });
+            });
+
+            // FAB button
+            document.getElementById('fab').addEventListener('click', showCreateHabitModal);
+        }
+
+        function switchTab(tabName) {
+            // Update nav buttons
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.tab === tabName);
+            });
+            
+            // Update tab content
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.toggle('active', content.id === tabName);
+            });
+
+            // Show/hide FAB based on tab
+            const fab = document.getElementById('fab');
+            fab.classList.toggle('hidden', tabName === 'challenge');
+        }
+
+        // Carrega dados da aplicaÃ§Ã£o
+        async function loadAppData() {
+            try {
+                // Simula busca na API - substitua pelos endpoints reais
+                await loadHabits();
+                await loadCurrentStreak();
+                
+                updateAllViews();
+            } catch (error) {
+                console.error('Erro ao carregar dados:', error);
+                showNotification('Erro ao carregar dados', 'error');
+            }
+        }
+
+        // Simula busca de hÃ¡bitos na API
+        async function loadHabits() {
+            // Aqui vocÃª faria: const response = await fetch(`${API_BASE_URL}/hobbies`);
+            // Por enquanto, simula dados vazios inicialmente
+            appState.habits = [];
+            
+            // Descomente para simular hÃ¡bitos existentes:
+            /*
+            appState.habits = [
+                {
+                    id: 1,
+                    name: "Beber 2L de Ã¡gua",
+                    description: "Manter-se hidratado durante o dia",
+                    category: "saude",
+                    completedToday: true
+                },
+                {
+                    id: 2,
+                    name: "Exercitar-se 30min",
+                    description: "Atividade fÃ­sica diÃ¡ria",
+                    category: "exercicio",
+                    completedToday: false
+                }
+            ];
+            */
+        }
+
+        // Simula busca do streak atual
+        async function loadCurrentStreak() {
+            // Aqui vocÃª faria: const response = await fetch(`${API_BASE_URL}/user/streak`);
+            appState.currentStreak = 0;
+        }
+
+        // Atualiza todas as visualizaÃ§Ãµes
+        function updateAllViews() {
+            updateDashboard();
+            updateChallenge();
+            updateStatistics();
+            updateGlobalStats();
+        }
+
+        // Dashboard
+        function updateDashboard() {
+            const hasHabits = appState.habits.length > 0;
+            
+            document.getElementById('dashboard-empty-state').classList.toggle('hidden', hasHabits);
+            document.getElementById('dashboard-content').classList.toggle('hidden', !hasHabits);
+            
+            if (hasHabits) {
+                renderDashboardHabits();
+                updateQuickStats();
+            }
+        }
+
+        function renderDashboardHabits() {
+            const container = document.getElementById('dashboard-habits');
+            const completedCount = appState.habits.filter(h => h.completedToday).length;
+            
+            container.innerHTML = appState.habits.map(habit => `
+                <div class="habit-card ${habit.completedToday ? 'completed' : ''}">
+                    <div class="habit-header">
+                        <div class="habit-info">
+                            <div class="habit-icon ${habit.category}">${getCategoryIcon(habit.category)}</div>
+                            <div class="habit-name">${escapeHtml(habit.name)}</div>
+                        </div>
+                        <div class="habit-actions">
+                            <button class="action-btn edit" onclick="editHabit(${habit.id})">âœï¸</button>
+                            <button class="action-btn delete" onclick="deleteHabit(${habit.id})">ðŸ—‘ï¸</button>
+                        </div>
+                    </div>
+                    <div class="habit-progress">
+                        <div class="progress-bar" style="width: ${habit.completedToday ? 100 : 0}%"></div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function updateQuickStats() {
+            const totalHabits = appState.habits.length;
+            const completedToday = appState.habits.filter(h => h.completedToday).length;
+            const completionRate = totalHabits > 0 ? Math.round((completedToday / totalHabits) * 100) : 0;
+            
+            document.getElementById('completion-rate').textContent = completionRate + '%';
+            document.getElementById('active-days').textContent = '1'; // Simulated
+            document.getElementById('achievements').textContent = Math.floor(appState.currentStreak / 7);
+        }
+
+        // Challenge (Ofensiva)
+        function updateChallenge() {
+            const hasHabits = appState.habits.length > 0;
+            
+            document.getElementById('challenge-empty-state').classList.toggle('hidden', hasHabits);
+            document.getElementById('challenge-content').classList.toggle('hidden', !hasHabits);
+            
+            if (hasHabits) {
+                updateChallengeStats();
+                renderChallengeHabits();
+                updateProgressCircle();
+            }
+        }
+
+        function updateChallengeStats() {
+            const totalHabits = appState.habits.length;
+            const completedToday = appState.completedHabits.length;
+            
+            document.getElementById('challenge-streak').textContent = appState.currentStreak;
+            document.getElementById('challenge-completed').textContent = completedToday;
+            document.getElementById('challenge-total').textContent = totalHabits;
+        }
+
+        function renderChallengeHabits() {
+            const container = document.getElementById('challenge-habits');
+            
+            container.innerHTML = appState.habits.map(habit => {
+                const isCompleted = appState.completedHabits.includes(habit.id);
+                return `
+                    <div class="habit-item ${isCompleted ? 'completed' : ''}" data-habit-id="${habit.id}">
+                        <div class="habit-content">
+                            <div class="habit-info">
+                                <div class="habit-icon ${habit.category}">${getCategoryIcon(habit.category)}</div>
+                                <div class="habit-details">
+                                    <h3>${escapeHtml(habit.name)}</h3>
+                                    ${habit.description ? `<p>${escapeHtml(habit.description)}</p>` : ''}
+                                </div>
+                            </div>
+                            <div class="habit-checkbox">
+                                <button class="checkbox-btn ${isCompleted ? 'completed' : ''}" 
+                                        onclick="toggleChallengeHabit(${habit.id})" 
+                                        ${!appState.challengeActive ? 'disabled' : ''}>
+                                    <span>${isCompleted ? 'âœ“' : 'â—‹'}</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function updateProgressCircle() {
+            const totalHabits = appState.habits.length;
+            const completedToday = appState.completedHabits.length;
+            const percentage = totalHabits > 0 ? Math.round((completedToday / totalHabits) * 100) : 0;
+            
+            document.getElementById('progress-percentage').textContent = percentage + '%';
+            
+            const circumference = 2 * Math.PI * 50;
+            const offset = circumference - (percentage / 100 * circumference);
+            document.getElementById('progress-circle').style.strokeDasharray = 
+                `${circumference - offset} ${circumference}`;
+        }
+
+        // Challenge Actions
+        function startChallenge() {
+            if (appState.habits.length === 0) {
+                showNotification('Crie pelo menos um hÃ¡bito primeiro!', 'error');
+                return;
+            }
+            
+            appState.challengeActive = true;
+            
+            const statusElement = document.getElementById('challenge-status');
+            statusElement.className = 'challenge-status status-active';
+            statusElement.innerHTML = `
+                <h3>Ofensiva Ativa! ðŸ”¥</h3>
+                <p>Marque cada hÃ¡bito conforme vocÃª os completa hoje.</p>
+                <button class="btn-warning" onclick="resetChallenge()">
+                    ðŸ”„ Resetar Dia
+                </button>
+            `;
+
+            // Enable checkboxes
+            document.querySelectorAll('.checkbox-btn').forEach(btn => {
+                btn.disabled = false;
+            });
+
+            showNotification('Ofensiva iniciada! Complete todos os hÃ¡bitos hoje!', 'success');
+        }
+
+        function toggleChallengeHabit(habitId) {
+            if (!appState.challengeActive) return;
+
+            const isCompleted = appState.completedHabits.includes(habitId);
+            
+            if (isCompleted) {
+                appState.completedHabits = appState.completedHabits.filter(id => id !== habitId);
+                showNotification('HÃ¡bito desmarcado', 'info');
+            } else {
+                appState.completedHabits.push(habitId);
+                showNotification('ParabÃ©ns! HÃ¡bito concluÃ­do!', 'success');
+            }
+            
+            renderChallengeHabits();
+            updateProgressCircle();
+            updateChallengeStats();
+            checkChallengeComplete();
+        }
+
+        function checkChallengeComplete() {
+            const totalHabits = appState.habits.length;
+            const completedToday = appState.completedHabits.length;
+            
+            if (completedToday === totalHabits && totalHabits > 0) {
+                // Ofensiva mantida!
+                const statusElement = document.getElementById('challenge-status');
+                statusElement.className = 'challenge-status status-complete';
+                statusElement.innerHTML = `
+                    <h3>ðŸ”¥ Ofensiva Mantida!</h3>
+                    <p>ParabÃ©ns! VocÃª completou TODOS os hÃ¡bitos hoje!</p>
+                    <p><strong>Ofensiva: ${appState.currentStreak + 1} dias consecutivos!</strong></p>
+                    <button class="btn-success" onclick="finishDay()">
+                        âœ¨ Finalizar Dia
+                    </button>
+                `;
+                
+                showNotification('ðŸ”¥ Ofensiva mantida! +1 dia no streak!', 'success');
+            } else if (completedToday > 0) {
+                updateChallengeWarning();
+            }
+        }
+
+        function updateChallengeWarning() {
+            const totalHabits = appState.habits.length;
+            const remaining = totalHabits - appState.completedHabits.length;
+            
+            if (remaining > 0 && appState.challengeActive) {
+                const statusElement = document.getElementById('challenge-status');
+                statusElement.className = 'challenge-status status-active';
+                statusElement.innerHTML = `
+                    <h3>âš ï¸ AtenÃ§Ã£o!</h3>
+                    <p>Faltam ${remaining} hÃ¡bitos para manter sua ofensiva!</p>
+                    <p><strong>Se nÃ£o completar tudo hoje, vocÃª perde os ${appState.currentStreak} dias de streak!</strong></p>
+                    <button class="btn-warning" onclick="resetChallenge()">
+                        ðŸ”„ Resetar Dia
+                    </button>
+                `;
+            }
+        }
+
+        function resetChallenge() {
+            if (confirm('Tem certeza que deseja resetar o dia? Isso vai desmarcar todos os hÃ¡bitos.')) {
+                appState.challengeActive = false;
+                appState.completedHabits = [];
+                
+                const statusElement = document.getElementById('challenge-status');
+                statusElement.className = 'challenge-status';
+                statusElement.innerHTML = `
+                    <h3>Pronto para recomeÃ§ar?</h3>
+                    <p>Clique no botÃ£o abaixo para iniciar sua ofensiva novamente!</p>
+                    <button class="btn-primary" onclick="startChallenge()">
+                        ðŸš€ Iniciar Ofensiva
+                    </button>
+                `;
+                
+                renderChallengeHabits();
+                updateProgressCircle();
+                updateChallengeStats();
+                showNotification('Dia resetado! Pronto para recomeÃ§ar.', 'info');
+            }
+        }
+
+        function finishDay() {
+            const totalHabits = appState.habits.length;
+            const completedToday = appState.completedHabits.length;
+            
+            if (completedToday === totalHabits) {
+                // Ofensiva mantida
+                appState.currentStreak++;
+                showNotification(`ðŸ”¥ Ofensiva de ${appState.currentStreak} dias mantida! AtÃ© amanhÃ£!`, 'success');
+            } else {
+                // Ofensiva perdida
+                loseStreak();
+            }
+            
+            appState.challengeActive = false;
+            updateAllViews();
+        }
+
+        function loseStreak() {
+            const previousStreak = appState.currentStreak;
+            appState.currentStreak = 0;
+            
+            const statusElement = document.getElementById('challenge-status');
+            statusElement.className = 'challenge-status';
+            statusElement.style.background = 'linear-gradient(135deg, #ef4444, #dc2626)';
+            statusElement.innerHTML = `
+                <h3>ðŸ’” Ofensiva Perdida!</h3>
+                <p>VocÃª nÃ£o completou todos os hÃ¡bitos hoje.</p>
+                <p><strong>Ofensiva anterior: ${previousStreak} dias</strong></p>
+                <p>NÃ£o desista! Comece uma nova sequÃªncia amanhÃ£!</p>
+            `;
+            
+            showNotification(`ðŸ’” Ofensiva de ${previousStreak} dias perdida. Tente novamente amanhÃ£!`, 'error');
+        }
+
+        // Statistics
+        function updateStatistics() {
+            const hasData = appState.habits.length > 0 || appState.currentStreak > 0;
+            
+            document.getElementById('stats-empty-state').classList.toggle('hidden', hasData);
+            document.getElementById('stats-content').classList.toggle('hidden', !hasData);
+            
+            if (hasData) {
+                updateStatsCharts();
+            }
+        }
+
+        function updateStatsCharts() {
+            const totalHabits = appState.habits.length;
+            const completedToday = appState.completedHabits.length;
+            const percentage = totalHabits > 0 ? Math.round((completedToday / totalHabits) * 100) : 0;
+            
+            // Progress ring
+            document.getElementById('stats-progress-text').textContent = percentage + '%';
+            document.getElementById('stats-progress-desc').textContent = 
+                `${completedToday} de ${totalHabits} hÃ¡bitos concluÃ­dos hoje`;
+            
+            const circumference = 2 * Math.PI * 50;
+            const offset = circumference - (percentage / 100 * circumference);
+            document.getElementById('stats-progress-ring').style.strokeDasharray = 
+                `${circumference - offset} ${circumference}`;
+            
+            // Streak text
+            document.getElementById('stats-streak-text').textContent = 
+                `ðŸ”¥ ${appState.currentStreak} dias de ofensiva!`;
+            
+            // Calendar (simplified)
+            renderStatsCalendar();
+            
+            // Categories
+            renderStatsCategories();
+            
+            // Overall stats
+            document.getElementById('total-active-days').textContent = Math.max(1, appState.currentStreak);
+            document.getElementById('success-rate').textContent = percentage + '%';
+            document.getElementById('best-streak').textContent = appState.currentStreak;
+        }
+
+        function renderStatsCalendar() {
+            const container = document.getElementById('stats-calendar');
+            const days = ['S', 'T', 'Q', 'Q', 'S', 'S', 'D'];
+            
+            container.innerHTML = '';
+            for (let i = 0; i < 14; i++) {
+                const dayElement = document.createElement('div');
+                dayElement.className = 'calendar-day';
+                dayElement.textContent = days[i % 7];
+                
+                if (i < appState.currentStreak) {
+                    dayElement.classList.add('completed');
+                }
+                if (i === 13) { // Today
+                    dayElement.classList.add('today');
+                }
+                
+                container.appendChild(dayElement);
+            }
+        }
+
+        function renderStatsCategories() {
+            const container = document.getElementById('stats-categories');
+            const categories = {};
+            
+            appState.habits.forEach(habit => {
+                if (!categories[habit.category]) {
+                    categories[habit.category] = { total: 0, completed: 0 };
+                }
+                categories[habit.category].total++;
+                if (appState.completedHabits.includes(habit.id)) {
+                    categories[habit.category].completed++;
+                }
+            });
+            
+            container.innerHTML = Object.entries(categories).map(([category, data]) => {
+                const percentage = data.total > 0 ? Math.round((data.completed / data.total) * 100) : 0;
+                return `
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <div class="habit-icon ${category}" style="width: 1.5rem; height: 1.5rem; font-size: 0.8rem;">
+                                ${getCategoryIcon(category)}
+                            </div>
+                            <span>${getCategoryName(category)}</span>
+                        </div>
+                        <span style="font-weight: 600;">${percentage}%</span>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Global stats update
+        function updateGlobalStats() {
+            const totalHabits = appState.habits.length;
+            const completedToday = appState.completedHabits.length;
+            
+            document.getElementById('streak-counter').textContent = appState.currentStreak;
+            document.getElementById('completed-counter').textContent = completedToday;
+            document.getElementById('total-counter').textContent = totalHabits;
+        }
+
+        // Utility functions
+        function updateCurrentDate() {
+            const today = new Date();
+            const options = { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            };
+            const dateElement = document.getElementById('current-date');
+            if (dateElement) {
+                dateElement.textContent = today.toLocaleDateString('pt-BR', options);
+            }
+        }
+
+        function getCategoryIcon(category) {
+            const icons = {
+                saude: 'ðŸ’§',
+                exercicio: 'ðŸ’ª',
+                estudo: 'ðŸ“š',
+                trabalho: 'ðŸ’¼',
+                lazer: 'ðŸ§˜',
+                outros: 'â­'
+            };
+            return icons[category] || 'â­';
+        }
+
+        function getCategoryName(category) {
+            const names = {
+                saude: 'SaÃºde',
+                exercicio: 'ExercÃ­cio',
+                estudo: 'Estudo',
+                trabalho: 'Trabalho',
+                lazer: 'Bem-estar',
+                outros: 'Outros'
+            };
+            return names[category] || 'Outros';
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function showCreateHabitModal() {
+        }
+        function editHabit(id) {
+            showNotification(`Editar hÃ¡bito ${id}`, 'info');
+        }
+
+        function deleteHabit(id) {
+            if (confirm('Tem certeza que deseja deletar este hÃ¡bito?')) {
+                appState.habits = appState.habits.filter(h => h.id !== id);
+                updateAllViews();
+                showNotification('HÃ¡bito deletado', 'info');
+            }
+        }
+
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            
+            const colors = {
+                success: '#10b981',
+                error: '#ef4444',
+                info: '#3b82f6'
+            };
+            
+            notification.style.cssText = `
+                position: fixed;
+                top: 2rem;
+                right: 2rem;
+                padding: 1rem 1.5rem;
+                background: ${colors[type]};
+                color: white;
+                border-radius: 12px;
+                font-weight: 600;
+                z-index: 2000;
+                animation: slideIn 0.3s ease;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+                max-width: 300px;
+            `;
+            
+            notification.textContent = message;
+            
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes slideIn {
+                    from { transform: translateX(100%); opacity: 0; }
+                    to { transform: translateX(0); opacity: 1; }
+                }
+                @keyframes slideOut {
+                    from { transform: translateX(0); opacity: 1; }
+                    to { transform: translateX(100%); opacity: 0; }
+                }
+            `;
+            
+            if (!document.head.querySelector('style[data-notifications]')) {
+                style.setAttribute('data-notifications', 'true');
+                document.head.appendChild(style);
+            }
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.parentNode.removeChild(notification);
+                    }
+                }, 300);
+            }, 3000);
+        }
+    </script>
 </body>
 </html>

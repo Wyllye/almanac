@@ -460,3 +460,225 @@ const app = new AlmanacApp();
 
 // Make app available globally for onclick handlers
 (window as any).app = app;
+
+// ===== ADICIONE ISSO NO FINAL DO SEU MAIN.TS =====
+
+// Challenge state
+let challengeActive = false;
+let completedHabitsToday: number[] = [];
+
+// Função para trocar para a aba Challenge (ou qualquer outra)
+function switchToTab(tabName: string) {
+    document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.tab === tabName);
+    });
+    document.querySelectorAll('.tab-content').forEach(content => {
+        content.classList.toggle('active', content.id === tabName);
+    });
+}
+
+// Atualiza a tela de ofensiva baseado nos hábitos existentes
+function updateChallengeTab() {
+    const hasHabits = this.habits && this.habits.length > 0;
+    const challengeEmpty = document.getElementById('challenge-empty-state');
+    const challengeContent = document.getElementById('challenge-content');
+    
+    if (challengeEmpty && challengeContent) {
+        challengeEmpty.classList.toggle('hidden', hasHabits);
+        challengeContent.classList.toggle('hidden', !hasHabits);
+    }
+    
+    if (hasHabits) {
+        updateChallengeStats();
+        renderChallengeHabits();
+        updateProgressCircle();
+        updateCurrentDate();
+    }
+}
+
+// Atualiza as estatísticas da ofensiva
+function updateChallengeStats() {
+    const totalHabits = this.habits ? this.habits.length : 0;
+    const completedToday = completedHabitsToday.length;
+    const currentStreak = 0; // Pega do seu sistema existente
+    
+    const streakEl = document.getElementById('challenge-streak');
+    const completedEl = document.getElementById('challenge-completed');
+    const totalEl = document.getElementById('challenge-total');
+    
+    if (streakEl) streakEl.textContent = currentStreak.toString();
+    if (completedEl) completedEl.textContent = completedToday.toString();
+    if (totalEl) totalEl.textContent = totalHabits.toString();
+}
+
+// Renderiza os hábitos na tela de ofensiva
+function renderChallengeHabits() {
+    const container = document.getElementById('challenge-habits');
+    if (!container || !this.habits) return;
+    
+    container.innerHTML = this.habits.map((habit: any) => {
+        const isCompleted = completedHabitsToday.includes(habit.id);
+        const categoryIcon = this.getCategoryIcon ? this.getCategoryIcon(habit.category) : '⭐';
+        
+        return `
+            <div class="habit-item ${isCompleted ? 'completed' : ''}" data-habit-id="${habit.id}">
+                <div class="habit-content">
+                    <div class="habit-info">
+                        <div class="habit-icon ${habit.category}">${categoryIcon}</div>
+                        <div class="habit-details">
+                            <h3>${habit.name}</h3>
+                            ${habit.description ? `<p>${habit.description}</p>` : ''}
+                        </div>
+                    </div>
+                    <div class="habit-checkbox">
+                        <button class="checkbox-btn ${isCompleted ? 'completed' : ''}" 
+                                onclick="toggleChallengeHabit(${habit.id})" 
+                                ${!challengeActive ? 'disabled' : ''}>
+                            <span>${isCompleted ? '✓' : '○'}</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+// Atualiza o círculo de progresso
+function updateProgressCircle() {
+    const totalHabits = this.habits ? this.habits.length : 0;
+    const completedToday = completedHabitsToday.length;
+    const percentage = totalHabits > 0 ? Math.round((completedToday / totalHabits) * 100) : 0;
+    
+    const progressText = document.getElementById('progress-percentage');
+    const progressCircle = document.getElementById('progress-circle');
+    
+    if (progressText) progressText.textContent = percentage + '%';
+    
+    if (progressCircle) {
+        const circumference = 2 * Math.PI * 50;
+        const offset = circumference - (percentage / 100 * circumference);
+        progressCircle.style.strokeDasharray = `${circumference - offset} ${circumference}`;
+    }
+}
+
+// Atualiza a data atual
+function updateCurrentDate() {
+    const dateElement = document.getElementById('current-date');
+    if (dateElement) {
+        const today = new Date();
+        const options: Intl.DateTimeFormatOptions = { 
+            weekday: 'long', 
+            year: 'numeric', 
+            month: 'long', 
+            day: 'numeric' 
+        };
+        dateElement.textContent = today.toLocaleDateString('pt-BR', options);
+    }
+}
+
+// Inicia a ofensiva
+function startChallenge() {
+    if (!this.habits || this.habits.length === 0) {
+        alert('Crie pelo menos um hábito primeiro!');
+        return;
+    }
+    
+    challengeActive = true;
+    
+    const statusElement = document.getElementById('challenge-status');
+    if (statusElement) {
+        statusElement.className = 'challenge-status status-active';
+        statusElement.innerHTML = `
+            <h3>Ofensiva Ativa! 🔥</h3>
+            <p>Marque cada hábito conforme você os completa hoje.</p>
+            <button class="btn-primary" onclick="resetChallenge()">
+                🔄 Resetar Dia
+            </button>
+        `;
+    }
+    
+    // Habilita os checkboxes
+    document.querySelectorAll('.checkbox-btn').forEach((btn: any) => {
+        btn.disabled = false;
+    });
+}
+
+// Toggle de hábito na ofensiva
+function toggleChallengeHabit(habitId: number) {
+    if (!challengeActive) return;
+    
+    const isCompleted = completedHabitsToday.includes(habitId);
+    
+    if (isCompleted) {
+        completedHabitsToday = completedHabitsToday.filter(id => id !== habitId);
+    } else {
+        completedHabitsToday.push(habitId);
+    }
+    
+    renderChallengeHabits();
+    updateProgressCircle();
+    updateChallengeStats();
+    checkChallengeComplete();
+}
+
+// Verifica se completou todos os hábitos
+function checkChallengeComplete() {
+    const totalHabits = this.habits ? this.habits.length : 0;
+    const completedToday = completedHabitsToday.length;
+    
+    if (completedToday === totalHabits && totalHabits > 0) {
+        const statusElement = document.getElementById('challenge-status');
+        if (statusElement) {
+            statusElement.className = 'challenge-status status-complete';
+            statusElement.innerHTML = `
+                <h3>🔥 Ofensiva Mantida!</h3>
+                <p>Parabéns! Você completou TODOS os hábitos hoje!</p>
+                <p><strong>Continue assim para manter seu streak!</strong></p>
+                <button class="btn-primary" onclick="finishDay()">
+                    ✨ Finalizar Dia
+                </button>
+            `;
+        }
+    }
+}
+
+// Reseta a ofensiva do dia
+function resetChallenge() {
+    if (confirm('Tem certeza que deseja resetar o dia?')) {
+        challengeActive = false;
+        completedHabitsToday = [];
+        
+        const statusElement = document.getElementById('challenge-status');
+        if (statusElement) {
+            statusElement.className = 'challenge-status';
+            statusElement.innerHTML = `
+                <h3>Pronto para recomeçar?</h3>
+                <p>Complete TODOS os hábitos para manter seu streak!</p>
+                <button class="btn-primary" onclick="startChallenge()">
+                    🚀 Iniciar Ofensiva
+                </button>
+            `;
+        }
+        
+        renderChallengeHabits();
+        updateProgressCircle();
+        updateChallengeStats();
+    }
+}
+
+// Finaliza o dia
+function finishDay() {
+    alert('Dia finalizado! Parabéns por manter a ofensiva! 🎉');
+    // Aqui você salvaria no banco que completou o dia
+    challengeActive = false;
+}
+
+// Torna as funções globais para os onclick
+(window as any).switchToTab = switchToTab;
+(window as any).startChallenge = startChallenge;
+(window as any).toggleChallengeHabit = toggleChallengeHabit;
+(window as any).resetChallenge = resetChallenge;
+(window as any).finishDay = finishDay;
+
+// Adicione essa chamada no seu método de atualização existente
+// Para quando carregar ou atualizar hábitos, chame: updateChallengeTab();
