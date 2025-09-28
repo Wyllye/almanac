@@ -4,8 +4,7 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), 'VITE_');
 
   return {
-    // para GitHub Pages em https://wyllye.github.io/almanac/
-    base: '/almanac/',
+    base: '/',
 
     server: {
       port: 5173,
