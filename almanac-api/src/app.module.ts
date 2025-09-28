@@ -8,16 +8,32 @@ import { HobbiesModule } from './modules/hobbies/hobbies.module';
     ConfigModule.forRoot({ isGlobal: true }),
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
-      useFactory: (cfg: ConfigService) => ({
-        type: 'postgres',
-        host: cfg.get<string>('DB_HOST'),
-        port: parseInt(cfg.get<string>('DB_PORT') ?? '5432', 10),
-        username: cfg.get<string>('DB_USER'),
-        password: cfg.get<string>('DB_PASS'),
-        database: cfg.get<string>('DB_NAME'),
-        autoLoadEntities: true,
-        synchronize: true,
-      }),
+      useFactory: (cfg: ConfigService) => {
+        const databaseUrl = cfg.get<string>('DATABASE_URL');
+
+        if (databaseUrl) {
+          
+          return {
+            type: 'postgres',
+            url: databaseUrl,
+            ssl: { rejectUnauthorized: false },
+            autoLoadEntities: true,
+            synchronize: true, 
+          };
+        }
+        
+        return {
+          type: 'postgres',
+          host: cfg.get<string>('DB_HOST'),
+          port: parseInt(cfg.get<string>('DB_PORT') ?? '5432', 10),
+          username: cfg.get<string>('DB_USER') ?? cfg.get<string>('DB_USERNAME'),
+          password: cfg.get<string>('DB_PASS') ?? cfg.get<string>('DB_PASSWORD'),
+          database: cfg.get<string>('DB_NAME') ?? cfg.get<string>('DB_DATABASE'),
+          ssl: { rejectUnauthorized: false },
+          autoLoadEntities: true,
+          synchronize: true,
+        };
+      },
     }),
     HobbiesModule,
   ],
