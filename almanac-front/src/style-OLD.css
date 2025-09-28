@@ -399,7 +399,7 @@ body {
 /* Stats Grid */
 .stats-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
     gap: 2rem;
     margin-top: 1.5rem;
 }
@@ -626,93 +626,40 @@ body {
         flex-direction: column;
         gap: 1rem;
     }
-    
+
     .hero-title {
         font-size: 2rem;
     }
-    
+
     .stats {
         gap: 1.5rem;
         flex-direction: column;
         align-items: center;
     }
-    
+
     .habit-card-content {
         flex-direction: column;
         gap: 1.5rem;
         align-items: flex-start;
     }
-    
+
     .habit-actions {
         align-self: flex-end;
     }
-    
+
     .stats-grid {
         grid-template-columns: 1fr;
     }
-    
+
     .fab {
         bottom: 1rem;
         right: 1rem;
         width: 4rem;
         height: 4rem;
     }
-    
+
     .content-area {
         margin-top: 1rem;
         padding: 1.5rem;
     }
-}
-
-/* ------------------------------------------- */
-/* Additional styles for the new features below */
-
-/* Flame lit style */
-.stat-icon.lit {
-    animation: flicker 1s ease-in-out infinite;
-    color: #ef4444;
-}
-
-@keyframes flicker {
-    0%, 100% { transform: scale(1); opacity: 0.8; }
-    50% { transform: scale(1.2); opacity: 1; }
-}
-
-/* Statistics summary styles */
-.stats-summary {
-    margin-top: 2rem;
-    display: grid;
-    gap: 1rem;
-}
-
-.stats-summary-item {
-    background: white;
-    border-radius: 16px;
-    padding: 1rem 1.5rem;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-    border: 1px solid rgba(0, 0, 0, 0.05);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.stats-summary-item .name {
-    font-weight: 600;
-    color: #1f2937;
-    font-size: 1.1rem;
-}
-
-.stats-summary-item .category {
-    font-size: 0.9rem;
-    color: #6b7280;
-}
-
-.stats-summary-item .status {
-    font-size: 1rem;
-    font-weight: 600;
-    color: #10b981;
-}
-
-.stats-summary-item .status.pending {
-    color: #ef4444;
 }

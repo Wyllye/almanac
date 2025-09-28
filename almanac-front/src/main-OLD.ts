@@ -23,100 +23,9 @@ class AlmanacApp {
   private habits: Habit[] = [];
   private currentEditingHabit: Habit | null = null;
   private isLoading = false;
-  /**
-   * Contador de dias consecutivos em que todos os hábitos foram concluídos.
-   */
-  private streakCount: number = 0;
-  /**
-   * Data da última atualização de streak no formato AAAA-MM-DD.
-   */
-  private lastUpdateDate: string = '';
-  /**
-   * Marca se, no dia atual, todos os hábitos já foram concluídos (impede incrementar mais de uma vez por dia).
-   */
-  private didCompleteAllToday: boolean = false;
 
   constructor() {
-    // Carregar streak antes de inicializar a aplicação
-    this.loadStreak();
     this.init();
-  }
-
-  /**
-   * Carrega o contador de sequência (streak) da localStorage e aplica as regras de reinício.
-   * Se o dia mudou em relação à última atualização armazenada, verifica se a sequência pode ser
-   * mantida (apenas se ontem todos os hábitos foram concluídos). Caso contrário, reseta para 0.
-   */
-  private loadStreak(): void {
-    const today = new Date().toISOString().slice(0, 10);
-    const dataStr = localStorage.getItem('almanacStreak');
-    if (dataStr) {
-      try {
-        const data = JSON.parse(dataStr);
-        this.streakCount = data.streakCount ?? 0;
-        this.lastUpdateDate = data.lastUpdateDate ?? today;
-        this.didCompleteAllToday = data.didCompleteAll ?? false;
-        // Se a data mudou, decidimos manter ou resetar a sequência
-        if (this.lastUpdateDate !== today) {
-          const lastDate = new Date(this.lastUpdateDate);
-          const currDate = new Date(today);
-          const diffTime = currDate.getTime() - lastDate.getTime();
-          const diffDays = diffTime / (1000 * 60 * 60 * 24);
-          // Se ontem foi concluído e estamos exatamente no dia seguinte, mantemos streak
-          if (!(diffDays === 1 && this.didCompleteAllToday)) {
-            this.streakCount = 0;
-          }
-          // Reiniciar indicadores diários para o novo dia
-          this.lastUpdateDate = today;
-          this.didCompleteAllToday = false;
-          this.saveStreak();
-        }
-      } catch (e) {
-        // Se algum erro ocorrer ao ler/parsing, iniciamos valores padrão
-        this.streakCount = 0;
-        this.lastUpdateDate = today;
-        this.didCompleteAllToday = false;
-        this.saveStreak();
-      }
-    } else {
-      // Primeiro uso: inicializar com padrão
-      this.streakCount = 0;
-      this.lastUpdateDate = today;
-      this.didCompleteAllToday = false;
-      this.saveStreak();
-    }
-  }
-
-  /**
-   * Persiste o contador de sequência (streak) e informações do dia na localStorage.
-   */
-  private saveStreak(): void {
-    const data = {
-      streakCount: this.streakCount,
-      lastUpdateDate: this.lastUpdateDate,
-      didCompleteAll: this.didCompleteAllToday,
-    };
-    localStorage.setItem('almanacStreak', JSON.stringify(data));
-  }
-
-  /**
-   * Verifica se todos os hábitos do dia estão concluídos. Caso estejam e ainda não
-   * tenham sido concluídos neste dia (impedindo incremento múltiplo), incrementa
-   * a sequência (streak) em 1, marca a flag diária e salva os dados.
-   */
-  private checkForStreakUpdate(): void {
-    const totalHabits = this.habits.length;
-    const completed = this.habits.filter(h => h.completedToday).length;
-    if (totalHabits > 0 && completed === totalHabits && !this.didCompleteAllToday) {
-      this.streakCount += 1;
-      this.didCompleteAllToday = true;
-      this.saveStreak();
-      // Atualiza o UI
-      const streakEl = document.getElementById('current-streak');
-      if (streakEl) streakEl.textContent = this.streakCount.toString();
-      const statsStreakEl = document.getElementById('stats-streak');
-      if (statsStreakEl) statsStreakEl.textContent = this.streakCount.toString();
-    }
   }
 
   private init(): void {
@@ -309,8 +218,7 @@ class AlmanacApp {
   private updateStats(): void {
     const totalHabits = this.habits.length;
     const completedToday = this.habits.filter(h => h.completedToday).length;
-    // Usa o contador de sequência carregado da localStorage
-    const currentStreak = this.streakCount;
+    const currentStreak = 0; // TODO: Implement streak logic
     
     // Update dashboard stats
     const totalEl = document.getElementById('total-habits');
@@ -334,8 +242,7 @@ class AlmanacApp {
 
   private updateStatistics(): void {
     const totalHabits = this.habits.length;
-    // Utiliza o contador de streak persistido para exibir na aba de estatísticas
-    const currentStreak = this.streakCount;
+    const currentStreak = 0; // TODO: Implement streak logic
     const achievements = Math.floor(this.habits.filter(h => h.completedToday).length / 2);
     
     // Update statistics tab
@@ -484,11 +391,8 @@ class AlmanacApp {
     }
     
     this.renderHabits();
-    // Atualiza números gerais e chama verificação de streak
     this.updateStats();
-    this.checkForStreakUpdate();
-    // Atualiza a aba de estatísticas incluindo o resumo e o valor da streak
-    this.updateStatistics();
+    this.updateStatistics(); // Ensure statistics summary updates when toggling habits
     
     const message = habit.completedToday ? 'Parabéns! Hábito concluído! 🎉' : 'Hábito desmarcado';
     this.showNotification(message, habit.completedToday ? 'success' : 'info');
