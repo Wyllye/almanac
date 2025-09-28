@@ -1,5 +1,3 @@
-import './style.css';
-
 // Types
 interface Habit {
   id: number;
