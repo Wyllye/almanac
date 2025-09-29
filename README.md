@@ -15,10 +15,9 @@ Um aplicativo simples para te ajudar a **criar e manter hábitos saudáveis**.
 
 ## 🎨 Como é a interface?  
 
-- 💻 **Design moderno** com gradientes e animações suaves  
-- 📱 **Responsivo** – funciona no celular e computador  
-- 🌈 **Categorias coloridas** (saúde, exercício, estudo...)  
-- 🔔 **Notificações visuais** de feedback para ações  
+- **Design moderno** com gradientes e animações suaves  
+- **Categorias coloridas** (saúde, exercício, estudo...)  
+- **Notificações visuais** de feedback para ações  
 
 ---
 
