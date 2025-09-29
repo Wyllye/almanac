@@ -74,10 +74,9 @@ cd almanac
 ### 3) Configurar Banco de Dados (PostgreSQL)
 
 - Inicie o serviço do PostgreSQL:
-````
-Windows: services.msc → PostgreSQL → Start
-Linux/Mac: sudo service postgresql start
-````
+
+Windows:```` services.msc → PostgreSQL → Start````
+Linux/Mac: ````sudo service postgresql start````
 
 - Crie usuário e banco:
 ````
