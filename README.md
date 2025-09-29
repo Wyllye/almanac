@@ -47,11 +47,12 @@ Um aplicativo simples para te ajudar a **criar e manter hábitos saudáveis**.
 ---
 
 ## 📂 Estrutura do Repositório  
-```almanac/
-````├─ almanac-api/ # Backend (NestJS + Prisma + PostgreSQL)
-````└─ almanac-front/ # Frontend (Vite + TS/JS + CSS)``````
+```
+almanac/
+├─ almanac-api/ # Backend (NestJS + Prisma + PostgreSQL)
+└─ almanac-front/ # Frontend (Vite + TS/JS + CSS)
 
-
+````
 ---
 
 ## ⚙️ Como rodar o projeto localmente  
@@ -63,15 +64,13 @@ Um aplicativo simples para te ajudar a **criar e manter hábitos saudáveis**.
 - PostgreSQL 16+ → [postgresql.org](https://www.postgresql.org)  
 
 ### 2) CLonar o repositório
-```git clone https://github.com/Wyllye/almanac.git
-cd almanac
-````
+```
 git clone https://github.com/Wyllye/almanac.git
 cd almanac
-
+````
 -----
 
-3) Configurar Banco de Dados (PostgreSQL)
+### 3) Configurar Banco de Dados (PostgreSQL)
 
 Inicie o serviço do PostgreSQL:
 
@@ -80,6 +79,29 @@ Windows: services.msc → PostgreSQL → Start
 Linux/Mac: sudo service postgresql start
 
 Crie usuário e banco:
-
+````
+CREATE USER almanac WITH ENCRYPTED PASSWORD 'almanac123';
+CREATE DATABASE almanac_db OWNER almanac;
+````
+### 4) Backend (NestJS + Prisma)
+````
+cd almanac-api
+````
+Crie o arquivo .env:
+````
+NODE_ENV=development
+PORT=3000
+DB_HOST=127.0.0.1
+DB_PORT=5432
+DB_USER=almanac
+DB_PASS=almanac123
+DB_NAME=almanac_db
+````
+Instale dependências e rode:
+````
+npm ci
+npm run start:dev
+````
+A API ficará disponível em: http://localhost:3000
 ----
 ## 👩‍💻 Desenvolvido com ❤️ por Maria Isabel (frontend) e Vinicius Andrei (backend)
