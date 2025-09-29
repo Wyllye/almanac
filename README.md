@@ -35,8 +35,8 @@ Aplicativo de hábitos com **NestJS + TypeORM + PostgreSQL** (API) e **Vite** (f
 
 ## Estrutura do repositório
 
-almanac/
-  ├─ almanac-api/      # Backend (NestJS + TypeORM + PostgreSQL)
+almanac/<br>
+  ├─ almanac-api/      # Backend (NestJS + TypeORM + PostgreSQL) <br>
   └─ almanac-front/    # Frontend (Vite + TS/JS)
 
 ---
