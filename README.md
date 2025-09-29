@@ -1,95 +1,105 @@
-# 📅 Almanac - Controlador de Hábitos
+📅 Almanac – Controlador de Hábitos
 
 Um aplicativo simples para te ajudar a criar e manter hábitos saudáveis.
 
-## O que o Almanac faz?
+✨ O que o Almanac faz?
 
-- ✅ **Criar hábitos** personalizados (beber água, exercitar-se, estudar...)
-- 🎯 **Marcar como concluído** quando você fizer o hábito
-- 📊 **Ver seu progresso** com estatísticas do dia
-- 🏆 **Acompanhar conquistas** e dias seguidos
+✅ Criar hábitos personalizados (beber água, exercitar-se, estudar...)
 
-## Como é a interface?
+🎯 Marcar como concluído quando você fizer o hábito
 
-- 🎨 **Design moderno** com gradientes e animações suaves
-- 📱 **Funciona no celular** e computador
-- 🌈 **Cores diferentes** para cada categoria de hábito (saúde, exercício, estudo...)
-- 🔔 **Notificações** de feedback para suas ações
+📊 Acompanhar seu progresso com estatísticas do dia
 
-## 🛠️ Tecnologias utilizadas
+🏆 Ver conquistas e sequência de dias seguidos cumpridos
 
-### Backend (API)
-- **Node.js** + **TypeScript**
-- **NestJS** (framework)
-- **PostgreSQL** (banco de dados)
-- **Prisma** (ORM)
+🎨 Como é a interface?
 
-### Frontend (Interface)
-- **HTML**, **CSS** e **TypeScript**
-- **Vite** (build tool)
-- **Animações CSS** para melhor experiência
+💻 Design moderno com gradientes e animações suaves
 
-## 🚀 Como rodar o projeto?
+📱 Responsivo – funciona no celular e computador
 
-Aplicativo de hábitos com **NestJS + TypeORM + PostgreSQL** (API) e **Vite** (frontend).
+🌈 Categorias coloridas (saúde, exercício, estudo...)
 
-## Estrutura do repositório
+🔔 Notificações visuais de feedback para ações
 
-almanac/<br>
-  ├─ almanac-api/      # Backend (NestJS + TypeORM + PostgreSQL) <br>
-  └─ almanac-front/    # Frontend (Vite + TS/JS)
+🛠️ Tecnologias utilizadas
+Backend (API)
 
----
+Node.js + TypeScript
 
-## 1) Pré-requisitos
+NestJS (framework)
 
-### Windows
-- Node.js 18+ (recomendado 20 LTS): https://nodejs.org  
-- Git: https://git-scm.com  
-- PostgreSQL 16+: https://www.postgresql.org/download/windows/  
+PostgreSQL (banco de dados)
 
-Se o PowerShell bloquear scripts, abra o PowerShell como Administrador e rode:  
-`Set-ExecutionPolicy RemoteSigned -Scope CurrentUser`
+Prisma (ORM)
 
-### macOS / Linux
-- Node.js 18+ / 20 LTS
-- Git
-- PostgreSQL 16+  
-  - macOS: `brew install postgresql@16 && brew services start postgresql@16`  
-  - Ubuntu/Debian: `sudo apt-get install postgresql postgresql-contrib`  
+Frontend (Interface)
 
----
+HTML, CSS e TypeScript
 
-## 2) Clonar o repositório
+Vite (build tool)
 
+Animações CSS para melhor experiência
+
+🚀 Links do Projeto
+
+🎥 Apresentação no YouTube: Clique aqui
+
+🌐 Frontend (Vercel): almanac-kappa.vercel.app
+
+⚙️ Backend (Render): almanac-7zhm.onrender.com
+
+💻 Repositório GitHub: Wyllye/almanac
+
+📂 Estrutura do Repositório
+almanac/
+ ├─ almanac-api/    # Backend (NestJS + Prisma + PostgreSQL)
+ └─ almanac-front/  # Frontend (Vite + TS/JS + CSS)
+
+⚙️ Como rodar o projeto localmente
+1) Pré-requisitos
+
+Node.js 18+ (recomendado 20 LTS) → nodejs.org
+
+Git → git-scm.com
+
+PostgreSQL 16+ → postgresql.org
+
+📌 Windows:
+Se o PowerShell bloquear scripts, rode como administrador:
+
+Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
+
+
+📌 macOS/Linux:
+
+brew install postgresql@16 && brew services start postgresql@16  # macOS
+sudo apt-get install postgresql postgresql-contrib              # Debian/Ubuntu
+
+2) Clonar o repositório
 git clone https://github.com/Wyllye/almanac.git
 cd almanac
 
----
+3) Configurar Banco de Dados (PostgreSQL)
 
-## 3) Banco de Dados (PostgreSQL)
+Inicie o serviço do PostgreSQL:
 
-### 3.1 Inicie o serviço
-- Windows: services.msc → PostgreSQL → Start
-- macOS/Linux: `sudo service postgresql start`
+Windows: services.msc → PostgreSQL → Start
 
-### 3.2 Criar usuário e banco
+Linux/Mac: sudo service postgresql start
 
-Abra o psql e rode:
+Crie usuário e banco:
 
 CREATE USER almanac WITH ENCRYPTED PASSWORD 'almanac123';
 CREATE DATABASE almanac_db OWNER almanac;
 
----
-
-## 4) Backend (NestJS)
-
+4) Backend (NestJS + Prisma)
 cd almanac-api
 
-Crie o arquivo `.env`:
+
+Crie o arquivo .env:
 
 NODE_ENV=development
-DB_SSL=false
 PORT=3000
 DB_HOST=127.0.0.1
 DB_PORT=5432
@@ -97,38 +107,39 @@ DB_USER=almanac
 DB_PASS=almanac123
 DB_NAME=almanac_db
 
+
 Instale dependências e rode:
 
 npm ci
 npm run start:dev
 
-A API ficará em http://localhost:3000
 
----
+A API ficará disponível em: http://localhost:3000
 
-## 5) Frontend (Vite)
-
+5) Frontend (Vite)
 cd almanac-front
 
-Crie `.env.development`:
+
+Crie .env.development:
 
 VITE_API_URL=http://localhost:3000
+
 
 Instale dependências e rode:
 
 npm ci
 npm run dev
 
-Acesse: http://localhost:5173
 
----
+Acesse no navegador: http://localhost:5173
 
-## 6) Fluxo de teste
+6) Fluxo de Teste
 
-1. API rodando (`npm run start:dev`) na porta 3000  
-2. Front rodando (`npm run dev`) em 5173  
-3. Acesse http://localhost:5173 e teste criar hábitos.
+Inicie o backend → npm run start:dev (porta 3000)
 
----
+Inicie o frontend → npm run dev (porta 5173)
 
-Desenvolvido com ❤️ por **Maria Isabel** (frontend) e **Vinicius Andrei** (backend)
+Abra http://localhost:5173
+ e cadastre seus hábitos 🚀
+
+👩‍💻 Desenvolvido com ❤️ por Maria Isabel (frontend) e Vinicius Andrei (backend)
