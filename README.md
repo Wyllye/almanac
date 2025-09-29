@@ -128,4 +128,4 @@ npm run dev
 - Abra http://localhost:5173 e cadastre seus hábitos 🚀
 
 ----
-## 👩‍💻 Desenvolvido com ❤️ por Maria Isabel (frontend) e Vinicius Andrei (backend)
+## 👩‍💻 Desenvolvido com ❤️ por Maria Isabel Wirth Marafon e Vinicius Andrei Wille
