@@ -73,13 +73,13 @@ cd almanac
 
 ### 3) Configurar Banco de Dados (PostgreSQL)
 
-Inicie o serviço do PostgreSQL:
-
+- Inicie o serviço do PostgreSQL:
+````
 Windows: services.msc → PostgreSQL → Start
-
 Linux/Mac: sudo service postgresql start
+````
 
-Crie usuário e banco:
+- Crie usuário e banco:
 ````
 CREATE USER almanac WITH ENCRYPTED PASSWORD 'almanac123';
 CREATE DATABASE almanac_db OWNER almanac;
@@ -89,7 +89,7 @@ CREATE DATABASE almanac_db OWNER almanac;
 ````
 cd almanac-api
 ````
-Crie o arquivo .env:
+- Crie o arquivo .env:
 ````
 NODE_ENV=development
 PORT=3000
@@ -99,13 +99,35 @@ DB_USER=almanac
 DB_PASS=almanac123
 DB_NAME=almanac_db
 ````
-Instale dependências e rode:
+- Instale dependências e rode:
 ````
 npm ci
 npm run start:dev
 ````
-A API ficará disponível em: http://localhost:3000
+- A API ficará disponível em: http://localhost:3000
 
------
+----
+### 5) Frontend (Vite)
+
+````cd almanac-front````
+- Crie .env.development:
+
+````VITE_API_URL=http://localhost:3000````
+
+- Instale dependências e rode:
+
+````
+npm ci
+npm run dev
+````
+- Acesse no navegador: http://localhost:5173
+
+----
+### 6) Fluxo de Teste
+
+- Inicie o backend → npm run start:dev (porta 3000)
+- Inicie o frontend → npm run dev (porta 5173)
+- Abra http://localhost:5173 e cadastre seus hábitos 🚀
+
 ----
 ## 👩‍💻 Desenvolvido com ❤️ por Maria Isabel (frontend) e Vinicius Andrei (backend)
