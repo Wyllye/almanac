@@ -74,7 +74,7 @@ cd almanac
 
 - Inicie o serviço do PostgreSQL:
 
-Windows:```` services.msc → PostgreSQL → Start````
+Windows:````services.msc → PostgreSQL → Start````
 Linux/Mac:````sudo service postgresql start````
 
 - Crie usuário e banco:
