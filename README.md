@@ -61,7 +61,8 @@ almanac/
 
 - Node.js 18+ (recomendado 20 LTS) → [nodejs.org](https://nodejs.org)  
 - Git → [git-scm.com](https://git-scm.com)  
-- PostgreSQL 16+ → [postgresql.org](https://www.postgresql.org)  
+- PostgreSQL 16+ → [postgresql.org](https://www.postgresql.org)
+-----
 
 ### 2) CLonar o repositório
 ```
@@ -83,6 +84,7 @@ Crie usuário e banco:
 CREATE USER almanac WITH ENCRYPTED PASSWORD 'almanac123';
 CREATE DATABASE almanac_db OWNER almanac;
 ````
+-----
 ### 4) Backend (NestJS + Prisma)
 ````
 cd almanac-api
@@ -103,5 +105,7 @@ npm ci
 npm run start:dev
 ````
 A API ficará disponível em: http://localhost:3000
+
+-----
 ----
 ## 👩‍💻 Desenvolvido com ❤️ por Maria Isabel (frontend) e Vinicius Andrei (backend)
