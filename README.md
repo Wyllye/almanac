@@ -47,9 +47,9 @@ Um aplicativo simples para te ajudar a **criar e manter hábitos saudáveis**.
 ---
 
 ## 📂 Estrutura do Repositório  
-almanac/
-├─ almanac-api/ # Backend (NestJS + Prisma + PostgreSQL)
-└─ almanac-front/ # Frontend (Vite + TS/JS + CSS)
+```almanac/
+````├─ almanac-api/ # Backend (NestJS + Prisma + PostgreSQL)
+````└─ almanac-front/ # Frontend (Vite + TS/JS + CSS)``````
 
 
 ---
